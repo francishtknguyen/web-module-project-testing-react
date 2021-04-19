@@ -6,9 +6,16 @@ import Show from './../Show';
 
 const testShow = {
     //add in approprate test data structure here.
+    name: 'Stranger Things',
+    summary: 'A love letter to the 80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl.',
+    seasons:[{id:0, name: "Season 1", episodes: []}, 
+    {id:1, name: "Season 2", episodes: []}, 
+    {id:2, name: "Season 3", episodes: []}, 
+    {id:3, name: "Season 4", episodes: []}]
 }
 
 test('renders testShow and no selected Season without errors', ()=>{
+    render(<Show show={testShow} selectedSeason='none' />)
 });
 
 test('renders Loading component when prop show is null', () => {
