@@ -19,15 +19,53 @@ test('renders testShow and no selected Season without errors', ()=>{
 });
 
 test('renders Loading component when prop show is null', () => {
+    const {rerender, debug} = render(<Show show={testShow} selectedSeason='none' />)
+
+    expect(screen.getByText(/select a season/i)).toBeTruthy();
+
+    rerender(<Show show={null} selectedSeason='none' />)
+
+    expect(screen.getByText(/fetching data/i)).toBeInTheDocument()
 });
 
 test('renders same number of options seasons are passed in', ()=>{
+    render(<Show show={testShow} selectedSeason='none' />)
+
+    expect(screen.getByText(/select a season/i)).toBeTruthy();
+
+    expect(screen.queryAllByTestId('season-option')).toHaveLength(4);
+
 });
 
 test('handleSelect is called when an season is selected', () => {
+    const mockHandleSelect = jest.fn();
+
+	render(
+		<Show
+			show={testShow}
+			selectedSeason={"none"}
+			handleSelect={mockHandleSelect}
+		/>
+	);
+
+    expect(mockHandleSelect).not.toHaveBeenCalled();
+
+    userEvent.selectOptions(screen.getByRole("combobox"), ['1']);
+    
+	expect(mockHandleSelect).toHaveBeenCalled();
+
 });
 
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
+    
+    const {rerender} =render(<Show show={testShow} selectedSeason='none'/>);
+
+    expect(screen.queryByTestId('episodes-container')).not.toBeInTheDocument();
+
+    rerender(<Show show={testShow} selectedSeason='0'/>);
+
+    expect(screen.queryByTestId('episodes-container')).toBeInTheDocument();
+
 });
 
 //Tasks:
