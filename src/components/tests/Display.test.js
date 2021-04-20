@@ -40,10 +40,10 @@ test('when fetch button pressed, amount of seasons rendered', async () => {
 test('when fetch button pressed, displayfunc called', async () => {
 
     const mockDisplayfunc = jest.fn();
-
-    // fetchShow.mockResolvedValueOnce(testShow);
-    const {rerender, debug} = render(<Display />)
+    fetchShow.mockResolvedValueOnce(testShow);
+    const {rerender, debug} = render(<Display displayFunc={mockDisplayfunc}/>)
     userEvent.click(screen.getByRole('button', {name: /press to get show data/i}));
+
     expect(await mockDisplayfunc).toHaveBeenCalled();
 })
 
