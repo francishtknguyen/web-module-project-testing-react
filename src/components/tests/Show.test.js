@@ -6,21 +6,66 @@ import Show from './../Show';
 
 const testShow = {
     //add in approprate test data structure here.
+    name: 'Stranger Things',
+    summary: 'A love letter to the 80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl.',
+    seasons:[{id:0, name: "Season 1", episodes: []}, 
+    {id:1, name: "Season 2", episodes: []}, 
+    {id:2, name: "Season 3", episodes: []}, 
+    {id:3, name: "Season 4", episodes: []}]
 }
 
 test('renders testShow and no selected Season without errors', ()=>{
+    render(<Show show={testShow} selectedSeason='none' />)
 });
 
 test('renders Loading component when prop show is null', () => {
+    const {rerender, debug} = render(<Show show={testShow} selectedSeason='none' />)
+
+    expect(screen.getByText(/select a season/i)).toBeTruthy();
+
+    rerender(<Show show={null} selectedSeason='none' />)
+
+    expect(screen.getByText(/fetching data/i)).toBeInTheDocument()
 });
 
 test('renders same number of options seasons are passed in', ()=>{
+    render(<Show show={testShow} selectedSeason='none' />)
+
+    expect(screen.getByText(/select a season/i)).toBeTruthy();
+
+    expect(screen.queryAllByTestId('season-option')).toHaveLength(4);
+
 });
 
 test('handleSelect is called when an season is selected', () => {
+    const mockHandleSelect = jest.fn();
+
+	render(
+		<Show
+			show={testShow}
+			selectedSeason={"none"}
+			handleSelect={mockHandleSelect}
+		/>
+	);
+
+    expect(mockHandleSelect).not.toHaveBeenCalled();
+
+    userEvent.selectOptions(screen.getByRole("combobox"), ['1']);
+    
+	expect(mockHandleSelect).toHaveBeenCalled();
+
 });
 
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
+    
+    const {rerender} =render(<Show show={testShow} selectedSeason='none'/>);
+
+    expect(screen.queryByTestId('episodes-container')).not.toBeInTheDocument();
+
+    rerender(<Show show={testShow} selectedSeason='0'/>);
+
+    expect(screen.queryByTestId('episodes-container')).toBeInTheDocument();
+
 });
 
 //Tasks:
